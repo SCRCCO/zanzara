@@ -1,0 +1,24 @@
+# Testato con Python 3.13 su Mac Apple Silicon (16 GB di RAM).
+# Serve anche ffmpeg installato nel sistema:  brew install ffmpeg
+
+# Base
+numpy
+requests
+python-dotenv
+torch
+torchaudio
+
+# Diarizzazione e impronte vocali
+pyannote.audio>=4.0
+
+# Trascrizione (Whisper sulla GPU del Mac)
+mlx-whisper
+
+# RAG: embedding
+sentence-transformers
+
+# Fine-tuning LoRA
+mlx-lm
+
+# Solo per gli script in passi_didattici/ (Whisper su CPU/CUDA)
+faster-whisper

@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Zanzara · In linea</title>
+<style>
+  :root {
+    --fondo: #f1f4ee;  --pannello: #ffffff;  --testo: #0d1f14;  --tenue: #5a6b60;
+    --linea: #cfd9cf;  --verde: #00a651;     --verde-scuro: #05632f;  --lime: #7fc400;
+    --cruciani: #dff3e5; --cruciani-bordo: #00a651;
+    --parenzo: #f1f7d9;  --parenzo-bordo: #7fc400;
+    --io: #14231a;       --io-testo: #f1f4ee;
+    --griglia: rgba(0,166,81,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #06160d;  --pannello: #0b2415;  --testo: #e8f3ea;  --tenue: #86a28f;
+      --linea: #17402a;  --verde: #1fd16f;     --verde-scuro: #0d7a3f;  --lime: #b4f03b;
+      --cruciani: #0f3a22; --cruciani-bordo: #1fd16f;
+      --parenzo: #26340c;  --parenzo-bordo: #b4f03b;
+      --io: #e8f3ea;       --io-testo: #06160d;
+      --griglia: rgba(31,209,111,.07);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; color: var(--testo); background: var(--fondo);
+    font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; overflow: hidden;
+    /* righelli da quadrante radio, in basso, + alone verde in alto */
+    background-image:
+      radial-gradient(900px 340px at 50% -80px, var(--griglia), transparent 70%),
+      repeating-linear-gradient(90deg, var(--griglia) 0 1px, transparent 1px 14px);
+    background-size: auto, 14px 100%;
+  }
+
+  /* ───────── testata ───────── */
+  header {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 12px 22px; background: var(--verde-scuro); color: #fff;
+    border-bottom: 4px solid var(--verde);
+  }
+  .marchio { display: flex; align-items: center; gap: 12px; }
+  .marchio svg { width: 40px; height: 40px; flex: none; }
+  .marchio .nome { font-weight: 900; font-size: 26px; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+  .marchio .sotto { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; opacity: .8; margin-top: 3px; }
+  .diretta {
+    display: flex; align-items: center; gap: 8px; margin-left: auto;
+    font: 700 12px/1 ui-monospace, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .diretta .punto { width: 10px; height: 10px; border-radius: 50%; background: var(--lime); position: relative; }
+  .diretta .punto::after {
+    content: ""; position: absolute; inset: -5px; border-radius: 50%;
+    border: 2px solid var(--lime); animation: onda 1.8s ease-out infinite;
+  }
+  @keyframes onda { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  #tempo { font: 600 13px ui-monospace, Menlo, monospace; opacity: .9; min-width: 8ch; }
+
+  /* equalizzatore */
+  .eq { display: flex; align-items: flex-end; gap: 3px; height: 26px; }
+  .eq i { width: 4px; background: var(--lime); border-radius: 1px; height: 30%; animation: eq 1.4s ease-in-out infinite; }
+  .eq i:nth-child(2) { animation-delay: -.3s; }  .eq i:nth-child(3) { animation-delay: -.7s; }
+  .eq i:nth-child(4) { animation-delay: -.1s; }  .eq i:nth-child(5) { animation-delay: -.9s; }
+  .eq i:nth-child(6) { animation-delay: -.5s; }  .eq i:nth-child(7) { animation-delay: -1.1s; }
+  @keyframes eq { 0%,100% { height: 18%; } 50% { height: 62%; } }
+  .eq.attivo i { animation-duration: .45s; background: #fff; }
+  .eq.attivo i:nth-child(odd) { animation-duration: .6s; }
+  @keyframes eq-alto { 0%,100% { height: 25%; } 50% { height: 100%; } }
+  .eq.attivo i { animation-name: eq-alto; }
+
+  /* ───────── studio: i due microfoni ───────── */
+  .studio { display: flex; gap: 14px; padding: 14px 22px 4px; max-width: 900px; width: 100%; margin: 0 auto; align-items: center; }
+  .ospite {
+    flex: 1; display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+    background: var(--pannello); border: 2px solid var(--linea); border-radius: 14px;
+    transition: border-color .25s, box-shadow .25s, opacity .3s, transform .25s;
+  }
+  .ospite .volto {
+    width: 46px; height: 46px; border-radius: 50%; flex: none; display: grid; place-items: center;
+    font-weight: 900; font-size: 19px; color: #fff; background: var(--verde-scuro); position: relative;
+  }
+  .ospite.parenzo .volto { background: #58800c; }
+  .ospite .chi { font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: 14px; }
+  .ospite .stato { font: 12px ui-monospace, Menlo, monospace; color: var(--tenue); }
+  .ospite.parla { border-color: var(--verde); box-shadow: 0 0 0 4px rgba(0,166,81,.18), 0 6px 20px rgba(0,166,81,.2); transform: translateY(-2px); }
+  .ospite.parenzo.parla { border-color: var(--lime); box-shadow: 0 0 0 4px rgba(127,196,0,.2), 0 6px 20px rgba(127,196,0,.2); }
+  .ospite.parla .volto::after {
+    content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid currentColor;
+    color: var(--verde); animation: onda 1.1s ease-out infinite;
+  }
+  .ospite.parenzo.parla .volto::after { color: var(--lime); }
+  .ospite.spento { opacity: .35; filter: grayscale(1); }
+  .ospite .mini { margin-left: auto; }
+  .ospite .mini i { background: var(--verde); }
+  .ospite.parenzo .mini i { background: var(--lime); }
+  .ospite:not(.parla) .mini i { animation: none; height: 14%; }
+
+  /* ───────── conversazione ───────── */
+  #chat {
+    flex: 1; overflow-y: auto; padding: 14px 22px 8px; max-width: 900px; width: 100%; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;
+  }
+  .msg {
+    max-width: 82%; padding: 10px 15px 11px; border-radius: 4px 16px 16px 16px; border-left: 5px solid;
+    animation: entra .35s cubic-bezier(.2,.9,.3,1.2) both; white-space: pre-wrap; position: relative;
+  }
+  @keyframes entra { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+  .msg .nome { display: block; font: 800 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .16em;
+               text-transform: uppercase; margin-bottom: 5px; opacity: .75; }
+  .msg.cruciani { align-self: flex-start; background: var(--cruciani); border-color: var(--cruciani-bordo); }
+  .msg.parenzo  { align-self: flex-start; background: var(--parenzo);  border-color: var(--parenzo-bordo); margin-left: 28px; }
+  .msg.io { align-self: flex-end; background: var(--io); color: var(--io-testo); border-radius: 16px 4px 16px 16px; border-color: var(--lime); }
+  .cursore::after { content: "▍"; color: var(--verde); animation: lampeggia .7s steps(1) infinite; margin-left: 1px; }
+  @keyframes lampeggia { 50% { opacity: 0; } }
+  .ascolta { margin-top: 8px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+             font: 800 11px/1 ui-monospace, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase;
+             padding: 6px 12px; border-radius: 999px; border: 1.5px solid currentColor; background: transparent;
+             color: var(--verde-scuro); transition: all .15s; }
+  @media (prefers-color-scheme: dark) { .ascolta { color: var(--verde); } }
+  .ascolta:hover { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .ascolta.carica { opacity: .7; cursor: progress; }
+  .ascolta.carica::before { content: ""; width: 10px; height: 10px; border-radius: 50%;
+                            border: 2px solid currentColor; border-top-color: transparent; animation: gira .8s linear infinite; }
+  .ascolta.suona { background: var(--verde); border-color: var(--verde); color: #fff; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  .voce-auto { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 700;
+               letter-spacing: .06em; text-transform: uppercase; }
+  .voce-auto input { accent-color: var(--verde); width: 15px; height: 15px; }
+  .sistema { align-self: center; font: 12px ui-monospace, Menlo, monospace; letter-spacing: .08em; color: var(--tenue); text-transform: uppercase; }
+
+  .pensa { align-self: flex-start; display: flex; align-items: center; gap: 10px; color: var(--tenue); font: 13px ui-monospace, Menlo, monospace; }
+  .pensa .eq { height: 18px; } .pensa .eq i { background: var(--verde); }
+
+  .suggerimenti { display: flex; flex-wrap: wrap; gap: 8px; align-self: center; justify-content: center; margin-top: 4px; }
+  .suggerimenti button {
+    font: 600 13px "Helvetica Neue", Arial, sans-serif; padding: 7px 13px; border-radius: 999px; cursor: pointer;
+    border: 1.5px solid var(--verde); background: transparent; color: var(--verde-scuro); transition: all .15s;
+  }
+  @media (prefers-color-scheme: dark) { .suggerimenti button { color: var(--verde); } }
+  .suggerimenti button:hover { background: var(--verde); color: #fff; transform: translateY(-2px); }
+
+  /* ───────── riga di scrittura ───────── */
+  .base { background: var(--pannello); border-top: 1px solid var(--linea); }
+  form { display: flex; gap: 10px; padding: 12px 22px 6px; max-width: 900px; margin: 0 auto; }
+  form input {
+    flex: 1; font: inherit; padding: 12px 16px; border-radius: 999px; border: 2px solid var(--linea);
+    background: var(--fondo); color: var(--testo); outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  form input:focus { border-color: var(--verde); box-shadow: 0 0 0 4px rgba(0,166,81,.15); }
+  #invia {
+    font: 800 13px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase;
+    padding: 0 22px; border: 0; border-radius: 999px; cursor: pointer; background: var(--verde); color: #fff;
+    transition: transform .12s, background .2s; display: flex; align-items: center; gap: 8px;
+  }
+  #invia:hover:not(:disabled) { background: var(--verde-scuro); transform: translateY(-2px); }
+  #invia:active:not(:disabled) { transform: translateY(1px); }
+  #invia:disabled { opacity: .45; cursor: wait; }
+  .comandi { display: flex; gap: 10px; align-items: center; padding: 4px 22px 12px; max-width: 900px; margin: 0 auto;
+             font-size: 12px; color: var(--tenue); flex-wrap: wrap; }
+  .comandi .spazio { flex: 1; }
+  .segmenti { display: inline-flex; border: 1.5px solid var(--linea); border-radius: 999px; overflow: hidden; }
+  .segmenti button { font: 700 12px "Helvetica Neue", Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase;
+                     padding: 6px 14px; border: 0; background: transparent; color: var(--tenue); cursor: pointer; transition: all .2s; }
+  .segmenti button.sel { background: var(--verde-scuro); color: #fff; }
+  .riaggancia { font: 700 12px "Helvetica Neue", Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase;
+                padding: 6px 14px; border-radius: 999px; border: 1.5px solid #c0392b; background: transparent; color: #c0392b; cursor: pointer; }
+  .riaggancia:hover { background: #c0392b; color: #fff; }
+
+  /* zanzara che attraversa lo schermo */
+  #zanzara { position: fixed; width: 46px; height: 46px; top: 38%; left: -60px; pointer-events: none; z-index: 5;
+             color: var(--verde-scuro); animation: volo 22s linear 6s infinite; opacity: .85; }
+  #zanzara .ali { transform-origin: 50% 50%; animation: ali .08s linear infinite alternate; }
+  @keyframes ali { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
+  @keyframes volo {
+    0%   { transform: translate(0, 0) rotate(8deg); }
+    15%  { transform: translate(22vw, -90px) rotate(-14deg); }
+    30%  { transform: translate(40vw, 40px) rotate(12deg); }
+    45%  { transform: translate(56vw, -60px) rotate(-10deg); }
+    60%  { transform: translate(72vw, 70px) rotate(14deg); }
+    78%  { transform: translate(90vw, -30px) rotate(-8deg); }
+    100% { transform: translate(112vw, 20px) rotate(6deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } #zanzara { display: none; } }
+  @media (max-width: 560px) {
+    .studio { padding: 10px 12px 2px; } .ospite .stato { display: none; } .ospite .mini { display: none; }
+    #chat, form, .comandi { padding-left: 12px; padding-right: 12px; } .msg { max-width: 94%; }
+    header { padding: 10px 14px; } .marchio .nome { font-size: 20px; } .eq.testata { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg id="zanzara" viewBox="0 0 64 64" aria-hidden="true" fill="currentColor" stroke="currentColor">
+  <g class="ali"><ellipse cx="26" cy="22" rx="17" ry="7" transform="rotate(-28 26 22)" opacity=".35" stroke="none"/>
+                 <ellipse cx="38" cy="20" rx="17" ry="6" transform="rotate(-8 38 20)" opacity=".35" stroke="none"/></g>
+  <ellipse cx="32" cy="34" rx="5.5" ry="13" transform="rotate(-70 32 34)" stroke="none"/>
+  <circle cx="47" cy="30" r="5" stroke="none"/>
+  <path d="M51 31 L62 38" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M30 40 L22 56 M34 41 L30 58 M38 40 L40 57 M27 38 L14 50" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>
+
+<header>
+  <div class="marchio">
+    <svg viewBox="0 0 64 64" aria-hidden="true" fill="#fff" stroke="#fff">
+      <ellipse cx="26" cy="22" rx="17" ry="7" transform="rotate(-28 26 22)" opacity=".4" stroke="none"/>
+      <ellipse cx="38" cy="20" rx="17" ry="6" transform="rotate(-8 38 20)" opacity=".4" stroke="none"/>
+      <ellipse cx="32" cy="34" rx="5.5" ry="13" transform="rotate(-70 32 34)" stroke="none"/>
+      <circle cx="47" cy="30" r="5" stroke="none"/>
+      <path d="M51 31 L62 38" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M30 40 L22 56 M34 41 L30 58 M38 40 L40 57 M27 38 L14 50" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div><div class="nome">La Zanzara</div><div class="sotto">Chiamata in diretta · parodia IA</div></div>
+  </div>
+  <div class="eq testata" id="eq-testata"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="diretta"><span class="punto"></span>In diretta <span id="tempo">00:00</span></div>
+</header>
+
+<div class="studio">
+  <div class="ospite cruciani" id="card-cruciani">
+    <div class="volto">C</div>
+    <div><div class="chi">Cruciani</div><div class="stato" id="stato-cruciani">in studio</div></div>
+    <div class="eq mini"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="ospite parenzo spento" id="card-parenzo">
+    <div class="volto">P</div>
+    <div><div class="chi">Parenzo</div><div class="stato" id="stato-parenzo">in pausa</div></div>
+    <div class="eq mini"><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<div id="chat"></div>
+
+<div class="base">
+  <form id="modulo">
+    <input id="testo" autocomplete="off" placeholder="Sei in linea. Cosa vuoi dire in diretta?" autofocus>
+    <button id="invia"><span>Parla</span> ➤</button>
+  </form>
+  <div class="comandi">
+    <span class="segmenti">
+      <button type="button" data-modo="cruciani" class="sel">Solo Cruciani</button>
+      <button type="button" data-modo="duo">Cruciani + Parenzo</button>
+    </span>
+    <label class="voce-auto" title="Genera e riproduce la voce di ogni battuta (serve VoiceStudio aperto; più lento)">
+      <input type="checkbox" id="auto"> Voce automatica</label>
+    <span class="spazio"></span>
+    <span>Parodia generata da IA: nulla di quanto scritto è stato detto davvero.</span>
+    <button type="button" class="riaggancia" id="nuova">Riaggancia</button>
+  </div>
+</div>
+
+<script>
+  const chat = document.getElementById('chat'), testo = document.getElementById('testo');
+  const invia = document.getElementById('invia'), eqTestata = document.getElementById('eq-testata');
+  const NOMI = { io: 'Tu · al telefono', cruciani: 'Cruciani', parenzo: 'Parenzo' };
+  const SUGGERIMENTI = [
+    "Il caffè al bar a due euro è un furto?",
+    "Vorrei vietare i monopattini elettrici",
+    "Sono vegano e mi prendono in giro: che faccio?",
+    "Il Natale è una festa inutile?",
+  ];
+  let modo = 'cruciani', storia = [], inizioChiamata = Date.now();
+  const pausa = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  /* ── timer della chiamata ── */
+  setInterval(() => {
+    const s = Math.floor((Date.now() - inizioChiamata) / 1000);
+    document.getElementById('tempo').textContent =
+      String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }, 1000);
+
+  /* ── modalità: solo / duo ── */
+  document.querySelectorAll('.segmenti button').forEach((b) => b.onclick = () => {
+    modo = b.dataset.modo;
+    document.querySelectorAll('.segmenti button').forEach((x) => x.classList.toggle('sel', x === b));
+    const duo = modo === 'duo', p = document.getElementById('card-parenzo');
+    p.classList.toggle('spento', !duo);
+    document.getElementById('stato-parenzo').textContent = duo ? 'in studio' : 'in pausa';
+  });
+
+  /* ── aiuti grafici ── */
+  function sistema(t) { const d = document.createElement('div'); d.className = 'sistema'; d.textContent = t; chat.appendChild(d); return d; }
+  function giu() { chat.scrollTop = chat.scrollHeight; }
+  function carta(chi, stato, parla) {
+    const c = document.getElementById('card-' + chi); if (!c) return;
+    c.classList.toggle('parla', parla);
+    document.getElementById('stato-' + chi).textContent = stato;
+  }
+
+  function nuovoMessaggio(chi) {
+    const d = document.createElement('div'); d.className = 'msg ' + chi;
+    const n = document.createElement('span'); n.className = 'nome'; n.textContent = NOMI[chi];
+    const t = document.createElement('span'); d.append(n, t); chat.appendChild(d); giu();
+    return t;
+  }
+  /* scrive il testo lettera per lettera, un po' più lenta sulla punteggiatura */
+  async function scrivi(el, testoCompleto) {
+    el.classList.add('cursore');
+    for (const lettera of testoCompleto) {
+      el.textContent += lettera; giu();
+      await pausa(/[.,;:!?]/.test(lettera) ? 130 : 16);
+    }
+    el.classList.remove('cursore');
+  }
+
+  /* ── voce: manda la battuta a VoiceStudio (via il nostro server) e riproduce il WAV ── */
+  let codaAudio = Promise.resolve();              // le battute si ascoltano in ordine, mai sovrapposte
+  function aggiungiAscolta(el, chi, battuta) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'ascolta'; b.textContent = '▶ Ascolta';
+    el.parentElement.appendChild(b);
+    let url = null;
+    b.onclick = () => { codaAudio = codaAudio.then(() => riproduci()); };
+    async function riproduci() {
+      try {
+        if (!url) {
+          b.classList.add('carica'); b.textContent = 'sto registrando…';
+          const r = await fetch('/voce', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                           body: JSON.stringify({ chi, testo: battuta }) });
+          if (!r.ok) throw new Error((await r.json()).errore || r.status);
+          url = URL.createObjectURL(await r.blob());
+        }
+        b.classList.remove('carica'); b.classList.add('suona'); b.textContent = '■ in onda';
+        carta(chi, 'al microfono', true);
+        await new Promise((fine) => { const a = new Audio(url); a.onended = fine; a.onerror = fine; a.play().catch(fine); });
+      } catch (e) {
+        b.classList.remove('carica'); b.textContent = 'voce non disponibile'; b.title = String(e.message || e);
+        return;
+      }
+      carta(chi, 'in studio', false); b.classList.remove('suona'); b.textContent = '▶ Riascolta';
+    }
+    return b;
+  }
+
+  function suggerimenti() {
+    const box = document.createElement('div'); box.className = 'suggerimenti';
+    SUGGERIMENTI.forEach((s) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = s;
+      b.onclick = () => { testo.value = s; document.getElementById('modulo').requestSubmit(); };
+      box.appendChild(b);
+    });
+    chat.appendChild(box);
+  }
+  function inizia() {
+    chat.innerHTML = ''; storia = []; inizioChiamata = Date.now();
+    sistema('— Sei in onda. Parla dopo il bip —');
+    suggerimenti();
+  }
+  document.getElementById('nuova').onclick = () => {
+    carta('cruciani', 'in studio', false); carta('parenzo', modo === 'duo' ? 'in studio' : 'in pausa', false);
+    inizia(); testo.focus();
+  };
+
+  /* ── invio del messaggio ── */
+  document.getElementById('modulo').onsubmit = async (e) => {
+    e.preventDefault();
+    const messaggio = testo.value.trim(); if (!messaggio) return;
+    document.querySelectorAll('.suggerimenti').forEach((x) => x.remove());
+    testo.value = ''; invia.disabled = true;
+    await scrivi(nuovoMessaggio('io'), messaggio);
+
+    /* mentre il modello pensa: equalizzatore attivo e "sta prendendo fiato" */
+    const pensa = document.createElement('div'); pensa.className = 'pensa';
+    pensa.innerHTML = '<span class="eq attivo"><i></i><i></i><i></i><i></i></span><span>sta prendendo fiato…</span>';
+    chat.appendChild(pensa); giu(); eqTestata.classList.add('attivo');
+    carta('cruciani', 'sta pensando…', false);
+
+    try {
+      const r = await fetch('/api', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                      body: JSON.stringify({ modo, messaggio, storia }) });
+      const dati = await r.json(); pensa.remove(); eqTestata.classList.remove('attivo');
+      if (dati.errore) throw new Error(dati.errore);
+      storia.push({ chi: 'io', testo: messaggio });
+      for (const b of dati.battute) {          // le battute arrivano una dopo l'altra, come in studio
+        carta(b.chi, 'al microfono', true); eqTestata.classList.add('attivo');
+        const el = nuovoMessaggio(b.chi);
+        await scrivi(el, b.testo);
+        const bottone = aggiungiAscolta(el, b.chi, b.testo);
+        if (document.getElementById('auto').checked) bottone.click();   // voce automatica
+        carta(b.chi, 'in studio', false); eqTestata.classList.remove('attivo');
+        storia.push(b); await pausa(350);
+      }
+    } catch (err) {
+      pensa.remove(); eqTestata.classList.remove('attivo');
+      carta('cruciani', 'in studio', false); carta('parenzo', modo === 'duo' ? 'in studio' : 'in pausa', false);
+      sistema('Linea caduta: ' + err.message + ' (Ollama è acceso?)');
+    }
+    invia.disabled = false; testo.focus();
+  };
+
+  inizia();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Segreti
+.env
+
+# Ambiente Python
+.venv/
+__pycache__/
+*.pyc
+
+# Dati generati (audio, trascrizioni, impronte vocali, modelli addestrati):
+# NON vanno mai pubblicati — contengono materiale protetto da copyright e dati biometrici
+data/
+*.log
+*.mp3
+*.wav
+*.npy
+*.safetensors
+
+# Sistema / editor
+.DS_Store
+.vscode/*
+!.vscode/launch.json
